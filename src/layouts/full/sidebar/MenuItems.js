@@ -90,13 +90,13 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: "Liste des patients",
+    title: "Consulter mes documents",
     icon: IconTypography,
     href: "/home",
   },
   {
     id: uniqueId(),
-    title: "Ajouter un profil",
+    title: "Consulter Anamnèse",
     icon: IconCopy,
     href: "/patient/new",
   },

@@ -81,5 +81,5 @@ const ShowPatient = () => {
     </PageContainer>
   );
 };
-
+  
 export default ShowPatient;
