@@ -4,7 +4,10 @@ import Loadable from "../layouts/full/shared/loadable/Loadable";
 import ShowPatient from "../views/intervenants/ShowPatient";
 import DetailsCR from "../views/intervenants/DetailsCR";
 import AddPatient from "../views/intervenants/AddPatient";
+import PatientDocs from "../views/patients/PatientDocs";
 import ProfilPatient from "../views/intervenants/ProfilPatient";
+import GererPAP from "../views/intervenants/GererPAP";
+
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import("../layouts/full/FullLayout")));
@@ -40,7 +43,10 @@ const Router = [
       { path: "/patient", exact: true, element: <ShowPatient /> },
       { path: "/patient/new", exact: true, element: <AddPatient /> },
       { path: "/patient/CR", exact: true, element: <DetailsCR /> },
-      //   { path: "/profile", exact: true, element: <ProfilPatient /> },
+      { path: "/patient/doc", exact: true, element: <PatientDocs/> },
+      { path: "/profile", exact: true, element: <ProfilPatient/> },
+      { path: "/gererPAP", exact: true, element: <GererPAP/> },
+
     ],
   },
   {

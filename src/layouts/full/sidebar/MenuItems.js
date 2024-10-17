@@ -90,7 +90,7 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: "LIste des patients",
+    title: "Liste des patients",
     icon: IconTypography,
     href: "/home",
   },

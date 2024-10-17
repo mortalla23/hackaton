@@ -13,7 +13,9 @@ import {
 } from "@mui/material";
 import { Stack } from "@mui/system";
 import { jsPDF } from "jspdf";
+import { Link } from "react-router-dom"; // Pour redirection vers PapPage
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward"; // Pour l'icône de redirection
 
 // Sample data for exercise reports
 const ecoCard = [
@@ -118,6 +120,7 @@ const downloadPDF = (report, patientComment) => {
 const ListeCR = () => {
   const [selectedReport, setSelectedReport] = useState(null);
   const [patientComment, setPatientComment] = useState("");
+  const [reports, setReports] = useState(ecoCard); // State to hold reports
 
   const handleReportClick = (report) => {
     setSelectedReport(report);
@@ -128,10 +131,47 @@ const ListeCR = () => {
     setPatientComment(event.target.value);
   };
 
+  const handleSubmitComment = () => {
+    if (patientComment.trim()) {
+      const updatedReports = reports.map((report) => {
+        if (report.title === selectedReport.title) {
+          // Add the patient comment to the comments array
+          return {
+            ...report,
+            comments: [
+              ...report.comments,
+              {
+                author: "Patient",
+                date: new Date().toLocaleString(),
+                text: patientComment,
+              },
+            ],
+          };
+        }
+        return report;
+      });
+
+      setReports(updatedReports);
+      setSelectedReport({
+        ...selectedReport,
+        comments: [
+          ...selectedReport.comments,
+          {
+            author: "Patient",
+            date: new Date().toLocaleString(),
+            text: patientComment,
+          },
+        ],
+      });
+
+      setPatientComment(""); // Clear the comment input after submission
+    }
+  };
+
   return (
     <div>
       <Grid container spacing={3}>
-        {ecoCard.map((product, index) => (
+        {reports.map((product, index) => (
           <Grid item sm={12} md={4} lg={3} key={index}>
             <Card
               onClick={() => handleReportClick(product)}
@@ -185,6 +225,18 @@ const ListeCR = () => {
                 sx={{ margin: 2 }}
               >
                 Télécharger le compte rendu
+              </Button>
+
+              {/* Button to redirect to PapPage */}
+              <Button
+                variant="outlined"
+                color="secondary"
+                component={Link} // Utilisation de Link pour rediriger
+                to="/gererPAP"
+                startIcon={<ArrowForwardIcon />}
+                sx={{ margin: 2 }}
+              >
+                Gérer le P.A.P
               </Button>
             </Card>
           </Grid>
@@ -284,9 +336,10 @@ const ListeCR = () => {
             <Button
               variant="contained"
               color="primary"
+              onClick={handleSubmitComment} // Submit comment button
               style={{ padding: "10px 20px", fontWeight: "bold" }}
             >
-              Soumettre le commentaire
+              Soumettre Le Commentaire
             </Button>
           </CardActions>
         </div>
