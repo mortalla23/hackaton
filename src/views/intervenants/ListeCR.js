@@ -6,16 +6,21 @@ import {
   Grid,
   Rating,
   Tooltip,
-  Fab,
+  IconButton,
   Button,
   TextField,
   CardActions,
+  Drawer
 } from "@mui/material";
 import { Stack } from "@mui/system";
 import { jsPDF } from "jspdf";
-import { Link } from "react-router-dom"; // Pour redirection vers PapPage
+import { Link } from "react-router-dom";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward"; // Pour l'icône de redirection
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ChatIcon from "@mui/icons-material/Chat";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import DownloadIcon from "@mui/icons-material/CloudDownload";
+import CloseIcon from "@mui/icons-material/Close";
 
 // Sample data for exercise reports
 const ecoCard = [
@@ -120,11 +125,12 @@ const downloadPDF = (report, patientComment) => {
 const ListeCR = () => {
   const [selectedReport, setSelectedReport] = useState(null);
   const [patientComment, setPatientComment] = useState("");
-  const [reports, setReports] = useState(ecoCard); // State to hold reports
+  const [reports, setReports] = useState(ecoCard);
+  const [showComments, setShowComments] = useState(false);
 
   const handleReportClick = (report) => {
     setSelectedReport(report);
-    setPatientComment(""); // Clear patient comment when selecting a new report
+    setPatientComment("");
   };
 
   const handleCommentChange = (event) => {
@@ -164,7 +170,7 @@ const ListeCR = () => {
         ],
       });
 
-      setPatientComment(""); // Clear the comment input after submission
+      setPatientComment("");
     }
   };
 
@@ -175,24 +181,22 @@ const ListeCR = () => {
           <Grid item sm={12} md={4} lg={3} key={index}>
             <Card
               onClick={() => handleReportClick(product)}
-              sx={{ cursor: "pointer" }}
+              sx={{
+                cursor: "pointer",
+                borderRadius: "16px",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+              }}
             >
-              <Tooltip title="Niveau d'exercice">
-                <Fab
-                  size="small"
-                  color="primary"
-                  sx={{
-                    bottom: "75px",
-                    right: "15px",
-                    position: "absolute",
-                  }}
-                >
-                  <Typography>{product.level}</Typography>
-                </Fab>
-              </Tooltip>
+              {/* <Tooltip title="Niveau d'exercice">
+                <IconButton aria-label="Voir">
+                  <VisibilityIcon color="primary" />
+                </IconButton>
+              </Tooltip> */}
 
               <CardContent sx={{ p: 3, pt: 2 }}>
-                <Typography variant="h6">{product.title}</Typography>
+                <Typography variant="h6" sx={{ color: "#4a4a4a", fontWeight: 'bold' }}>
+                  {product.title}
+                </Typography>
                 <Stack
                   direction="row"
                   alignItems="center"
@@ -213,25 +217,28 @@ const ListeCR = () => {
                 </Stack>
               </CardContent>
 
-              {/* Button to download the report as PDF */}
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<CloudDownloadIcon />}
-                onClick={(e) => {
+              {/* Buttons with icons */}
+              <CardActions>
+                <IconButton aria-label="Télécharger" onClick={(e) => {
                   e.stopPropagation(); // Prevent Card onClick
                   downloadPDF(product, patientComment);
-                }}
-                sx={{ margin: 2 }}
-              >
-                Télécharger le compte rendu
-              </Button>
+                }}>
+                  <DownloadIcon color="primary" />
+                </IconButton>
 
-              {/* Button to redirect to PapPage */}
+                <IconButton aria-label="Commentaire" onClick={(e) => {
+                  e.stopPropagation(); // Prevent Card onClick
+                  setShowComments(true); // Show the comments Drawer
+                }}>
+                  <ChatIcon color="primary" />
+                </IconButton>
+              </CardActions>
+
+              {/* Button to redirect to PAP management */}
               <Button
                 variant="outlined"
                 color="secondary"
-                component={Link} // Utilisation de Link pour rediriger
+                component={Link}
                 to="/gererPAP"
                 startIcon={<ArrowForwardIcon />}
                 sx={{ margin: 2 }}
@@ -243,81 +250,59 @@ const ListeCR = () => {
         ))}
       </Grid>
 
-      {/* Display selected report details and comments */}
-      {selectedReport && (
-        <div
-          style={{
-            marginTop: "20px",
-            padding: "20px",
-            borderRadius: "8px",
-            boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-          }}
-        >
-          <Typography
-            variant="h5"
-            style={{ marginBottom: "10px", fontWeight: "600", color: "#333" }}
-          >
-            {selectedReport.title}
-          </Typography>
-          <Typography
-            variant="body1"
-            paragraph
-            style={{ marginBottom: "20px", lineHeight: "1.6", color: "#555" }}
-          >
-            {selectedReport.content}
-          </Typography>
+      {/* Drawer for comments */}
+      <Drawer
+        anchor="right"
+        open={showComments}
+        onClose={() => setShowComments(false)}
+        sx={{ width: '500px', flexShrink: 0 }}
+      >
+        <div style={{ width: '300px', padding: '10px' }}>
+          <Typography variant="h6">Commentaires</Typography>
 
-          {/* Comments from Orthophoniste and Médecin */}
-          <Typography
-            variant="h6"
-            style={{ marginBottom: "10px", fontWeight: "500", color: "#333" }}
+          <IconButton
+            edge="end"
+            color="inherit"
+            onClick={() => setShowComments(false)}
+            aria-label="close"
           >
-            Commentaires :
-          </Typography>
-          {selectedReport.comments.map((comment, index) => (
+            <CloseIcon />
+          </IconButton>
+
+          {/* Display comments */}
+          {selectedReport && selectedReport.comments.map((comment, index) => (
             <div
               key={index}
               style={{
                 marginBottom: "15px",
                 padding: "10px",
-                backgroundColor: "#f0f0f0",
-                borderRadius: "10px",
-                maxWidth: "75%",
+                backgroundColor: "#e0f7fa",
+                borderRadius: "8px",
+                border: "1px solid #b2ebf2",
               }}
             >
               <Typography
                 variant="body2"
-                style={{ fontWeight: "bold", color: "#333" }}
+                style={{ fontWeight: "bold", color: "#00796b" }}
               >
                 {comment.author}{" "}
                 <span
                   style={{
                     fontWeight: "normal",
-                    color: "#999",
+                    color: "#004d40",
                     fontSize: "12px",
                   }}
                 >
                   le {comment.date}
                 </span>
               </Typography>
-              <Typography variant="body2" style={{ color: "#555" }}>
+              <Typography variant="body2" style={{ color: "#004d40" }}>
                 {comment.text}
               </Typography>
             </div>
           ))}
 
-          {/* Section for the patient's comment */}
-          <Typography
-            variant="h6"
-            style={{
-              marginTop: "20px",
-              marginBottom: "10px",
-              fontWeight: "500",
-              color: "#333",
-            }}
-          >
-            Votre commentaire :
-          </Typography>
+          {/* Add patient comment */}
           <TextField
             label="Ajoutez votre commentaire"
             variant="outlined"
@@ -332,18 +317,16 @@ const ListeCR = () => {
               backgroundColor: "#f9f9f9",
             }}
           />
-          <CardActions>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSubmitComment} // Submit comment button
-              style={{ padding: "10px 20px", fontWeight: "bold" }}
-            >
-              Soumettre Le Commentaire
-            </Button>
-          </CardActions>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmitComment}
+            style={{ padding: "10px 20px", fontWeight: "bold" }}
+          >
+            Soumettre Le Commentaire
+          </Button>
         </div>
-      )}
+      </Drawer>
     </div>
   );
 };
