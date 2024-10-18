@@ -28,25 +28,7 @@ const ShowPatient = () => {
 
   return (
     <PageContainer title="Profil du Patient" description="Informations sur le patient et ses documents">
-      <Grid container spacing={2} style={{ marginBottom: "25px" }}>
-        {/* Champ Nom */}
-        <Grid item xs={12} sm={3}>
-          <Typography variant="h6"> Nom </Typography>
-          <Typography> Dupont </Typography>
-        </Grid>
-
-        {/* Champ Prénom */}
-        <Grid item xs={12} sm={3}>
-          <Typography variant="h6"> Prénom </Typography>
-          <Typography> Jean </Typography>
-        </Grid>
-
-        {/* Date de naissance */}
-        <Grid item xs={12} sm={3}>
-          <Typography variant="h6"> Date de naissance </Typography>
-          <Typography> 13/09/2024 </Typography>
-        </Grid>
-      </Grid>
+      
 
       <Typography variant="h5" style={{ marginBottom: "20px" }}>
         Listes des comptes rendus
