@@ -7,6 +7,8 @@ import AddPatient from "../views/intervenants/AddPatient";
 import PatientDocs from "../views/patients/PatientDocs";
 import ProfilPatient from "../views/intervenants/ProfilPatient";
 import GererPAP from "../views/intervenants/GererPAP";
+import AnamnesePage from "../views/intervenants/AnamnesePage";
+import ListeCRP from "../views/patients/ListeCRP";
 
 
 /* ***Layouts**** */
@@ -46,6 +48,9 @@ const Router = [
       { path: "/patient/doc", exact: true, element: <PatientDocs/> },
       { path: "/profile", exact: true, element: <ProfilPatient/> },
       { path: "/gererPAP", exact: true, element: <GererPAP/> },
+      { path: "/AnamnesePage", exact: true, element: <AnamnesePage/> },
+      { path: "/listeCRP", exact: true, element: <ListeCRP/> },
+
 
     ],
   },
