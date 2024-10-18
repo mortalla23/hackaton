@@ -228,10 +228,12 @@ const ListeCR = () => {
 
                 <IconButton aria-label="Commentaire" onClick={(e) => {
                   e.stopPropagation(); // Prevent Card onClick
+                  setSelectedReport(product); // Mettre à jour le rapport sélectionné
                   setShowComments(true); // Show the comments Drawer
                 }}>
                   <ChatIcon color="primary" />
                 </IconButton>
+
               </CardActions>
 
               {/* Button to redirect to PAP management */}
